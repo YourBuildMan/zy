@@ -1,0 +1,17 @@
+{% extends 'blogd/base.html' %}
+
+{% block title %}
+    分享一篇文章
+{% endblock %}
+
+{% block content %}
+    {% if send %}
+        <h1>Email 已经发送成功了</h1>
+    {% else %}
+        <h1>分享:{{ post.title }}</h1>
+        <form action="." method="post">
+            {{ form.as_p }}
+            <input type="submit" value="发送邮件">
+        </form>
+    {% endif %}
+{% endblock %}

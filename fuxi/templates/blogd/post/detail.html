@@ -1,0 +1,46 @@
+{% extends 'blogd/base.html' %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p class="date">
+    发布日期: {{ post.publish }}  作者:{{ post.author }}
+    </p>
+    {{ post.body|linebreaks }}
+    <p>
+        <a href="{% url 'blogd:post_share' post.id %}">fenxiang</a>
+    </p>
+    <h2>你可能喜欢的文章</h2>
+    {% for post in similar_posts %}
+        <p>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </p>
+    {% empty %}
+        没有相似的文章
+    {% endfor %}
+    <h2>总共{{ comments.count }}条评论</h2>
+    {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+                第{{ forloop.counter }}条评论，评论人：{{ comment.name }}
+                {{ comment.created }}
+            </p>
+            {{ comment.body|linebreaks }}
+        </div>
+    {% empty %}
+        <p>这篇文章还没有评论。</p>
+    {% endfor %}
+    {% if new_comment %}
+        <h2>你的评论已经被添加。</h2>
+    {% else %}
+        <h2>添加一个新的评论</h2>
+        <form action="." method="post">
+            {{ comment_form.as_table }}
+            {% csrf_token %}
+            <input type="submit" value="添加">
+        </form>
+    {% endif %}
+{% endblock %}
